@@ -1,28 +1,90 @@
 package com.currencycloud.client;
 
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import javax.annotation.Nullable;
+
 import com.currencycloud.client.dirty.ModificationTracker;
 import com.currencycloud.client.dirty.ModifiedValueProvider;
 import com.currencycloud.client.exception.CurrencyCloudException;
-import com.currencycloud.client.model.*;
+import com.currencycloud.client.model.Account;
+import com.currencycloud.client.model.AccountPaymentChargesSetting;
+import com.currencycloud.client.model.AccountPaymentChargesSettings;
+import com.currencycloud.client.model.Accounts;
+import com.currencycloud.client.model.Balance;
+import com.currencycloud.client.model.Balances;
+import com.currencycloud.client.model.BankDetails;
+import com.currencycloud.client.model.Beneficiaries;
+import com.currencycloud.client.model.Beneficiary;
+import com.currencycloud.client.model.Contact;
+import com.currencycloud.client.model.Contacts;
+import com.currencycloud.client.model.Conversion;
+import com.currencycloud.client.model.ConversionCancellation;
+import com.currencycloud.client.model.ConversionCancellationQuote;
+import com.currencycloud.client.model.ConversionDateChange;
+import com.currencycloud.client.model.ConversionDateChangeDetails;
+import com.currencycloud.client.model.ConversionDates;
+import com.currencycloud.client.model.ConversionProfitAndLoss;
+import com.currencycloud.client.model.ConversionProfitAndLosses;
+import com.currencycloud.client.model.ConversionReport;
+import com.currencycloud.client.model.ConversionSplit;
+import com.currencycloud.client.model.ConversionSplitHistory;
+import com.currencycloud.client.model.Conversions;
 import com.currencycloud.client.model.Currency;
+import com.currencycloud.client.model.DetailedRate;
+import com.currencycloud.client.model.Entity;
+import com.currencycloud.client.model.FundingAccounts;
+import com.currencycloud.client.model.Iban;
+import com.currencycloud.client.model.Ibans;
+import com.currencycloud.client.model.MarginBalanceTopUp;
+import com.currencycloud.client.model.Pagination;
+import com.currencycloud.client.model.Payer;
+import com.currencycloud.client.model.PayerRequiredDetail;
+import com.currencycloud.client.model.Payment;
+import com.currencycloud.client.model.PaymentAuthorisations;
+import com.currencycloud.client.model.PaymentConfirmation;
+import com.currencycloud.client.model.PaymentDates;
+import com.currencycloud.client.model.PaymentDeliveryDate;
+import com.currencycloud.client.model.PaymentFeeRule;
+import com.currencycloud.client.model.PaymentPurposeCode;
+import com.currencycloud.client.model.PaymentReport;
+import com.currencycloud.client.model.PaymentSubmission;
+import com.currencycloud.client.model.PaymentTrackingInfo;
+import com.currencycloud.client.model.Payments;
+import com.currencycloud.client.model.QuotePaymentFee;
+import com.currencycloud.client.model.Rates;
+import com.currencycloud.client.model.ReportRequest;
+import com.currencycloud.client.model.ReportRequests;
+import com.currencycloud.client.model.ResponseException;
+import com.currencycloud.client.model.SenderDetails;
+import com.currencycloud.client.model.SettlementAccount;
+import com.currencycloud.client.model.Transaction;
+import com.currencycloud.client.model.Transactions;
+import com.currencycloud.client.model.Transfer;
+import com.currencycloud.client.model.Transfers;
+import com.currencycloud.client.model.VirtualAccount;
+import com.currencycloud.client.model.VirtualAccounts;
+import com.currencycloud.client.model.WithdrawalAccountFunds;
+import com.currencycloud.client.model.WithdrawalAccounts;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import si.mazi.rescu.ClientConfig;
 import si.mazi.rescu.RestProxyFactory;
 import si.mazi.rescu.serialization.jackson.DefaultJacksonObjectMapperFactory;
 import si.mazi.rescu.serialization.jackson.JacksonObjectMapperFactory;
-
-import javax.annotation.Nullable;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.HeaderParam;
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * This is the high-lever entry point to the Currency Cloud API. It provides access to the HTTP API while providing
@@ -816,6 +878,46 @@ public class CurrencyCloudClient {
 
     ///////////////////////////////////////////////////////////////////
     ///// PAYMENTS ////////////////////////////////////////////////////
+
+
+    public Payment validatePayment(Payment payment, @Nullable Payer payer, @Nullable Boolean xScaForceSms) throws CurrencyCloudException {
+      if (payer == null) {
+          payer = Payer.create();
+      }
+      return api.validatePayment(
+              authToken,
+              userAgent,
+              xScaForceSms,
+              payment.getCurrency(),
+              payment.getBeneficiaryId(),
+              payment.getAmount(),
+              payment.getReason(),
+              payment.getReference(),
+              payment.getId(),
+              dateOnly(payment.getPaymentDate()),
+              payment.getPaymentType(),
+              payment.getConversionId(),
+              payer.getLegalEntityType(),
+              payer.getCompanyName(),
+              payer.getFirstName(),
+              payer.getLastName(),
+              payer.getCity(),
+              flattenList(payer.getAddress()),
+              payer.getPostcode(),
+              payer.getStateOrProvince(),
+              payer.getCountry(),
+              dateOnly(payer.getDateOfBirth()),
+              payer.getIdentificationType(),
+              payer.getIdentificationValue(),
+              payment.getUniqueRequestId(),
+              payment.getUltimateBeneficiaryName(),
+              payment.getPurposeCode(),
+              getOnBehalfOf(),
+              payment.getChargeType(),
+              payment.getFeeAmount(),
+              payment.getFeeCurrency()
+      );
+  }
 
     public Payment createPayment(Payment payment, @Nullable Payer payer) throws CurrencyCloudException {
         if (payer == null) {

@@ -1,14 +1,79 @@
 package com.currencycloud.client;
 
-import com.currencycloud.client.model.*;
-
-import javax.annotation.Nullable;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
+import javax.annotation.Nullable;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import com.currencycloud.client.model.Account;
+import com.currencycloud.client.model.AccountPaymentChargesSetting;
+import com.currencycloud.client.model.AccountPaymentChargesSettings;
+import com.currencycloud.client.model.Accounts;
+import com.currencycloud.client.model.AuthenticateResponse;
+import com.currencycloud.client.model.Balance;
+import com.currencycloud.client.model.Balances;
+import com.currencycloud.client.model.BankDetails;
+import com.currencycloud.client.model.Beneficiaries;
+import com.currencycloud.client.model.Beneficiary;
+import com.currencycloud.client.model.BeneficiaryRequiredDetails;
+import com.currencycloud.client.model.Contact;
+import com.currencycloud.client.model.Contacts;
+import com.currencycloud.client.model.Conversion;
+import com.currencycloud.client.model.ConversionCancellation;
+import com.currencycloud.client.model.ConversionCancellationQuote;
+import com.currencycloud.client.model.ConversionDateChange;
+import com.currencycloud.client.model.ConversionDateChangeDetails;
+import com.currencycloud.client.model.ConversionDates;
+import com.currencycloud.client.model.ConversionProfitAndLosses;
+import com.currencycloud.client.model.ConversionReport;
+import com.currencycloud.client.model.ConversionSplit;
+import com.currencycloud.client.model.ConversionSplitHistory;
+import com.currencycloud.client.model.Conversions;
+import com.currencycloud.client.model.Currencies;
+import com.currencycloud.client.model.DetailedRate;
+import com.currencycloud.client.model.FundingAccounts;
+import com.currencycloud.client.model.Ibans;
+import com.currencycloud.client.model.MarginBalanceTopUp;
+import com.currencycloud.client.model.Pagination;
+import com.currencycloud.client.model.Payer;
+import com.currencycloud.client.model.PayerRequiredDetails;
+import com.currencycloud.client.model.Payment;
+import com.currencycloud.client.model.PaymentAuthorisations;
+import com.currencycloud.client.model.PaymentConfirmation;
+import com.currencycloud.client.model.PaymentDates;
+import com.currencycloud.client.model.PaymentDeliveryDate;
+import com.currencycloud.client.model.PaymentFeeRules;
+import com.currencycloud.client.model.PaymentPurposeCodes;
+import com.currencycloud.client.model.PaymentReport;
+import com.currencycloud.client.model.PaymentSubmission;
+import com.currencycloud.client.model.PaymentTrackingInfo;
+import com.currencycloud.client.model.Payments;
+import com.currencycloud.client.model.QuotePaymentFee;
+import com.currencycloud.client.model.Rates;
+import com.currencycloud.client.model.ReportRequest;
+import com.currencycloud.client.model.ReportRequests;
+import com.currencycloud.client.model.ResponseException;
+import com.currencycloud.client.model.SenderDetails;
+import com.currencycloud.client.model.SettlementAccounts;
+import com.currencycloud.client.model.Transaction;
+import com.currencycloud.client.model.Transactions;
+import com.currencycloud.client.model.Transfer;
+import com.currencycloud.client.model.Transfers;
+import com.currencycloud.client.model.VirtualAccounts;
+import com.currencycloud.client.model.WithdrawalAccountFunds;
+import com.currencycloud.client.model.WithdrawalAccounts;
 
 /**
  * This is the low-level Currency Cloud HTTP API Java implementation. This interface's methods map directly to
@@ -684,6 +749,44 @@ public interface CurrencyCloud {
 
     ///////////////////////////////////////////////////////////////////
     ///// PAYMENTS API ////////////////////////////////////////////////
+
+    /** Validate Beneficiary bank details */
+    @POST
+    @Path("payments/validate")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    Payment validatePayment(
+            @HeaderParam("X-Auth-Token") String authToken,
+            @HeaderParam("User-Agent") String userAgent,
+            @Nullable @HeaderParam("x-sca-force-sms") Boolean  xScaForceSms,
+            @FormParam("currency") String currency,
+            @FormParam("beneficiary_id") String beneficiaryId,
+            @FormParam("amount") BigDecimal amount,
+            @FormParam("reason") String reason,
+            @FormParam("reference") String reference,
+            @Nullable @FormParam("id") String id,
+            @Nullable @FormParam("payment_date") java.sql.Date paymentDate,
+            @Nullable @FormParam("payment_type") String paymentType,
+            @Nullable @FormParam("conversion_id") String conversionId,
+            @Nullable @FormParam("payer_entity_type") String payerEntityType,
+            @Nullable @FormParam("payer_company_name") String payerCompanyName,
+            @Nullable @FormParam("payer_first_name") String payerFirstName,
+            @Nullable @FormParam("payer_last_name") String payerLastName,
+            @Nullable @FormParam("payer_city") String payerCity,
+            @Nullable @FormParam("payer_address") String payerAddress,
+            @Nullable @FormParam("payer_postcode") String payerPostcode,
+            @Nullable @FormParam("payer_state_or_province") String payerStateOrProvince,
+            @Nullable @FormParam("payer_country") String payerCountry,
+            @Nullable @FormParam("payer_date_of_birth") java.sql.Date payerDateOfBirth,
+            @Nullable @FormParam("payer_identification_type") String payerIdentificationType,
+            @Nullable @FormParam("payer_identification_value") String payerIdentificationValue,
+            @Nullable @FormParam("unique_request_id") String uniqueRequestId,
+            @Nullable @FormParam("ultimate_beneficiary_name") String ultimateBeneficiaryName,
+            @Nullable @FormParam("purpose_code") String purposeCode,
+            @Nullable @FormParam("on_behalf_of") String onBehalfOf,
+            @Nullable @FormParam("charge_type") String chargeType,
+            @Nullable @FormParam("fee_amount") BigDecimal feeAmount,
+            @Nullable @FormParam("fee_currency") String feeCurrency
+    ) throws ResponseException;
 
     /** Create a Payment */
     @POST
