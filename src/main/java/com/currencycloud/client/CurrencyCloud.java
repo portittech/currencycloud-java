@@ -59,6 +59,7 @@ import com.currencycloud.client.model.PaymentPurposeCodes;
 import com.currencycloud.client.model.PaymentReport;
 import com.currencycloud.client.model.PaymentSubmission;
 import com.currencycloud.client.model.PaymentTrackingInfo;
+import com.currencycloud.client.model.PaymentValidation;
 import com.currencycloud.client.model.Payments;
 import com.currencycloud.client.model.QuotePaymentFee;
 import com.currencycloud.client.model.Rates;
@@ -754,7 +755,7 @@ public interface CurrencyCloud {
     @POST
     @Path("payments/validate")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    Payment validatePayment(
+    PaymentValidation validatePayment(
             @HeaderParam("X-Auth-Token") String authToken,
             @HeaderParam("User-Agent") String userAgent,
             @Nullable @HeaderParam("x-sca-force-sms") Boolean  xScaForceSms,
