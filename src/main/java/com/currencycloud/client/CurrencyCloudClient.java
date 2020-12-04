@@ -56,6 +56,7 @@ import com.currencycloud.client.model.PaymentPurposeCode;
 import com.currencycloud.client.model.PaymentReport;
 import com.currencycloud.client.model.PaymentSubmission;
 import com.currencycloud.client.model.PaymentTrackingInfo;
+import com.currencycloud.client.model.PaymentValidation;
 import com.currencycloud.client.model.Payments;
 import com.currencycloud.client.model.QuotePaymentFee;
 import com.currencycloud.client.model.Rates;
@@ -879,7 +880,7 @@ public class CurrencyCloudClient {
     ///// PAYMENTS ////////////////////////////////////////////////////
 
 
-    public Payment validatePayment(Payment payment, @Nullable Payer payer, @Nullable Boolean xScaForceSms) throws CurrencyCloudException {
+    public PaymentValidation validatePayment(Payment payment, @Nullable Payer payer, @Nullable Boolean xScaForceSms) throws CurrencyCloudException {
       if (payer == null) {
           payer = Payer.create();
       }
