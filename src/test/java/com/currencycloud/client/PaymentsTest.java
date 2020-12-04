@@ -370,4 +370,22 @@ public class PaymentsTest extends BetamaxTestSupport {
         assertThat(paymentEvent7.getForeignExchangeDetails(), nullValue());
         assertThat(paymentEvent7.getLastUpdateTime(), equalTo(parseDateTime("2019-07-09T13:20:50+00:00")));
     }
+
+    @Test
+    @Betamax(tape = "can_validate", match = {MatchRule.method, MatchRule.uri, MatchRule.body})
+    public void testCanvalidate() throws Exception {
+        Payment payment = Payment.create();
+        payment.setCurrency("EUR");
+        payment.setBeneficiaryId("60fbe8d3-f7d0-4124-9077-93d09fb2186a");
+        payment.setAmount(new BigDecimal("788.44"));
+        payment.setReason("Invoice");
+        payment.setReference("REF-INV-1838");
+        payment.setUniqueRequestId("a20bc586-b7a9-4316-9daf-d4ede4c0d4ee");
+
+        PaymentValidation validation = client.validatePayment(payment, null, false);
+
+        assertThat(validation, notNullValue());
+        assertThat(validation.getValidationResult(), equalTo("success"));
+        
+    }
 }
