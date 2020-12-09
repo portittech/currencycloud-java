@@ -4,7 +4,7 @@
 
     <groupId>com.currencycloud.currencycloud-java</groupId>
     <artifactId>currencycloud-java</artifactId>
-    <version>4.0.2</version>
+    <version>validate_payment</version>
     <packaging>jar</packaging>
 
     <name>Currencycloud</name>
@@ -93,7 +93,7 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.0.1</version>
@@ -124,7 +124,7 @@
                     <source>8</source>
                     <additionalOptions>${javadoc.opts}</additionalOptions>
                 </configuration>
-            </plugin>
+            </plugin> -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>

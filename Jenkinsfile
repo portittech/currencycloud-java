@@ -1,1 +1,1 @@
-runSpringBootCI()
+runSpringBootCICustom()
