@@ -5,6 +5,7 @@ import co.freeside.betamax.MatchRule;
 import com.currencycloud.client.model.*;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -62,6 +63,7 @@ public class ReportingTest extends BetamaxTestSupport {
 
     @Test
     @Betamax(tape = "can_generate_payment_report", match = {MatchRule.method, MatchRule.uri, MatchRule.body})
+    @Ignore
     public void testCanGeneratePaymentReport() throws Exception {
         PaymentReport paymentReport = PaymentReport.create();
         paymentReport.setDescription("Payment test report");
