@@ -330,7 +330,7 @@ public interface CurrencyCloud {
     ) throws ResponseException;
 
     /** Find Beneficiaries */
-    @GET
+    @POST
     @Path("beneficiaries/find")
     Beneficiaries findBeneficiaries(
             @HeaderParam("X-Auth-Token") String authToken,
@@ -429,7 +429,7 @@ public interface CurrencyCloud {
     ) throws ResponseException;
 
     /** Find Contact */
-    @GET
+    @POST
     @Path("contacts/find")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     Contacts findContacts(
@@ -639,7 +639,7 @@ public interface CurrencyCloud {
     ///// FUNDING API ///////////////////////////////////////////////////
 
     /** Find FundingAccounts */
-    @GET
+    @POST
     @Path("funding_accounts/find")
     FundingAccounts findFundingAccounts(
             @HeaderParam("X-Auth-Token") String authToken,
@@ -1064,8 +1064,8 @@ public interface CurrencyCloud {
     ///// REFERENCE API ///////////////////////////////////////////////
 
     /** Bank Details */
-    @GET
-    @Path("reference/bank_details")
+    @POST
+    @Path("reference/bank_details/find")
     BankDetails bankDetails(
             @HeaderParam("X-Auth-Token") String authToken,
             @HeaderParam("User-Agent") String userAgent,
