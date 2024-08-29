@@ -474,6 +474,7 @@ public interface CurrencyCloud {
       @Nullable @FormParam("on_behalf_of") String onBehalfOf
   ) throws ResponseException;
 
+
   /**
    * Verify Beneficiary Bank Account
    **/
